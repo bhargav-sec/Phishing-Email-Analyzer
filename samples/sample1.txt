@@ -1,0 +1,26 @@
+From: Microsoft Security <no-reply@micros0ft-security.com>
+To: bbargav@company.com
+Date: Wed, 22 Apr 2026 14:32:11 +0000
+Subject: [URGENT] Your Office 365 account will be suspended in 24 hours
+Reply-To: security-alert@micros0ft-verify.net
+
+Dear User,
+
+We detected unusual sign-in activity on your Microsoft Office 365 account 
+from IP address 185.220.101.47 (Moscow, Russia).
+
+To prevent permanent suspension of your account within the next 24 hours, 
+you MUST verify your identity immediately by clicking the link below:
+
+>>> https://micros0ft-verify.net/account/verify?id=8HJ29dkLp0
+
+If you do not verify within 24 hours, your account, emails, and files 
+stored in OneDrive will be permanently deleted.
+
+A verification document is attached for your records.
+
+Attachment: account_verification.html (12 KB)
+
+Thank you,
+Microsoft Security Team
+Copyright © 2026 Microsoft Corporation
