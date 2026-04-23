@@ -1,5 +1,5 @@
 From: Microsoft Security <no-reply@micros0ft-security.com>
-To: bbargav@company.com
+To: b@company.com
 Date: Wed, 22 Apr 2026 14:32:11 +0000
 Subject: [URGENT] Your Office 365 account will be suspended in 24 hours
 Reply-To: security-alert@micros0ft-verify.net

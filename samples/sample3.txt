@@ -1,0 +1,23 @@
+From: DHL Express <tracking@dhl-delivery-notice.net>
+To: b1@company.com
+Date: Thu, 17 Apr 2026 06:44:12 +0000
+Subject: [DHL] Package delivery failed - Action required (Tracking #DHL8823910)
+
+Dear Customer,
+
+Your package could not be delivered on 17 April 2026 due to an incorrect 
+shipping address. The parcel is currently held at our Dublin depot.
+
+To reschedule delivery, please download and complete the attached 
+shipment form within 48 hours, or the parcel will be returned to sender.
+
+Tracking Number: DHL8823910
+Attachment: DHL_Shipment_Form_8823910.zip (contains: invoice.pdf.exe)
+
+MD5: 3a7bd3e2360a3d7f99e4f9d6b6e2c5a8
+SHA256: 8f14e45fceea167a5a36dedd4bea2543fa1b8e5d8f2d4f1a3c9b7e5d4f6a2c1e
+
+For tracking updates: http://dhl-tracking-notice.net/track?id=DHL8823910
+
+DHL Express
+Customer Service

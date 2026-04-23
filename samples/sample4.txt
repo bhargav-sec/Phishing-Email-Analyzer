@@ -1,0 +1,21 @@
+From: GitHub <noreply@github.com>
+To: b1@gmail.com
+Date: Thu, 23 Apr 2026 10:15:00 +0000
+Subject: [bhargav-sec/Phishing-Email-Analyzer] New issue opened
+
+Hi bhargav-sec,
+
+A new issue was opened in your repository:
+
+Issue: Add Streamlit web UI for easier demo
+Opened by: bhargav-sec
+Repository: bhargav-sec/Phishing-Email-Analyzer
+
+View the issue:
+https://github.com/bhargav-sec/Phishing-Email-Analyzer/issues/1
+
+---
+You are receiving this because you are watching this repository.
+
+Unsubscribe: https://github.com/notifications/unsubscribe
+GitHub, Inc. 88 Colin P. Kelly Jr Street, San Francisco, CA 94107

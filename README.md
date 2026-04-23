@@ -117,7 +117,7 @@ SOC analysts triage hundreds of phishing reports per week. This tool:
 
 ## 🚧 Roadmap
 
-- [ ] Web UI (Streamlit)
+- [x] Web UI (Streamlit) ✅
 - [ ] Batch analysis from a folder of `.eml` files
 - [ ] VirusTotal / AbuseIPDB enrichment for IOCs
 - [ ] Export reports as PDF/JSON for SOAR integration

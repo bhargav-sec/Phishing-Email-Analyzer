@@ -1,0 +1,25 @@
+From: Mark Walsh <mark.walsh@ceo-office-365.com>
+To: accounts-payable@company.com
+Date: Mon, 14 Apr 2026 09:12:33 +0000
+Subject: Urgent - Need help processing a confidential payment
+
+Hi,
+
+Are you at your desk? I need you to handle something quickly and discreetly.
+
+We're closing a confidential acquisition today and I need a wire transfer of 
+€48,500 processed to our new vendor before 2pm. I'm in back-to-back meetings 
+with legal and can't call — please handle via email only.
+
+Beneficiary: Nordrhein Capital GmbH
+IBAN: DE89 3704 0044 0532 0130 00
+BIC: COBADEFFXXX
+Reference: Acquisition fee - Project Aurora
+
+Do NOT mention this to anyone on the team — the deal is under NDA until 
+Friday's announcement. I'm counting on you.
+
+Thanks,
+Mark
+
+Sent from my iPhone
