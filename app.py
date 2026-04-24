@@ -1,5 +1,7 @@
 """
 Phishing Email Analyzer — Streamlit Web UI
+Now supports .txt, .eml, .msg, .pdf, and image uploads.
+
 Author: Bhargav (bhargav-sec)
 """
 
@@ -7,6 +9,7 @@ import os
 import json
 import streamlit as st
 from groq import Groq
+from email_parser import parse_email_file, SUPPORTED_EXTENSIONS
 
 # ---------- Page config ----------
 st.set_page_config(
@@ -74,56 +77,78 @@ with st.sidebar:
     st.header("ℹ️ About")
     st.markdown(
         """
-        This tool uses an LLM acting as a **Tier-2 SOC analyst** to:
-        - Classify the email (PHISHING / SUSPICIOUS / LEGITIMATE)
-        - Extract IOCs (URLs, domains, IPs, hashes, attachments)
+        Upload any suspicious email and this tool will:
+        - Classify it (PHISHING / SUSPICIOUS / LEGITIMATE)
+        - Extract IOCs (URLs, domains, IPs, hashes)
         - Map tactics to **MITRE ATT&CK**
         - Recommend SOC actions
-
-        **Why:** Phishing triage normally takes 5-10 min per email.
-        This brings it to ~5 sec with consistent structured output.
+        
+        **Supports:** `.txt`, `.eml`, `.msg`, `.pdf`, `.png`, `.jpg`
         """
     )
     st.divider()
-    st.markdown("**Tech:** Python · Groq API · Streamlit · MITRE ATT&CK")
+    st.markdown("**Tech:** Python · Groq API · Streamlit · Tesseract OCR · pdfplumber")
     st.markdown("[GitHub Repo](https://github.com/bhargav-sec/Phishing-Email-Analyzer)")
 
-# ---------- Sample selector ----------
+# ---------- Input tabs ----------
 st.subheader("📥 Input")
 
-samples_dir = "samples"
-sample_files = []
-if os.path.isdir(samples_dir):
-    sample_files = sorted(
-        [f for f in os.listdir(samples_dir) if f.endswith(".txt")]
+tab_upload, tab_paste, tab_samples = st.tabs([
+    "📎 Upload File",
+    "📝 Paste Text",
+    "🗂️ Load Sample",
+])
+
+email_text = ""
+
+with tab_upload:
+    uploaded = st.file_uploader(
+        "Drag & drop or browse — PDF, EML, MSG, TXT, or screenshot",
+        type=SUPPORTED_EXTENSIONS,
+        accept_multiple_files=False,
     )
+    if uploaded is not None:
+        try:
+            with st.spinner(f"📄 Extracting text from {uploaded.name}..."):
+                email_text = parse_email_file(uploaded.name, uploaded.getvalue())
+            st.success(f"✅ Extracted {len(email_text)} characters from `{uploaded.name}`")
+            with st.expander("Preview extracted text"):
+                st.text(email_text[:2000] + ("..." if len(email_text) > 2000 else ""))
+        except Exception as e:
+            st.error(f"❌ Could not parse file: {e}")
 
-col1, col2 = st.columns([1, 2])
+with tab_paste:
+    pasted = st.text_area(
+        "Paste raw email (headers + body):",
+        height=280,
+        placeholder="From: ...\nTo: ...\nSubject: ...\n\n<body>",
+    )
+    if pasted.strip():
+        email_text = pasted
 
-with col1:
+with tab_samples:
+    samples_dir = "samples"
+    sample_files = []
+    if os.path.isdir(samples_dir):
+        sample_files = sorted(
+            [f for f in os.listdir(samples_dir) if f.endswith(".txt")]
+        )
     selected = st.selectbox(
         "Load a sample email",
         ["-- none --"] + sample_files,
     )
-
-default_text = ""
-if selected != "-- none --":
-    with open(os.path.join(samples_dir, selected), "r", encoding="utf-8") as f:
-        default_text = f.read()
-
-email_text = st.text_area(
-    "Paste the raw email (headers + body):",
-    value=default_text,
-    height=280,
-    placeholder="From: ...\nTo: ...\nSubject: ...\n\n<body>",
-)
+    if selected != "-- none --":
+        with open(os.path.join(samples_dir, selected), "r", encoding="utf-8") as f:
+            email_text = f.read()
+        with st.expander("Preview sample"):
+            st.text(email_text)
 
 analyze_btn = st.button("🔍 Analyze Email", type="primary", use_container_width=True)
 
 # ---------- Analysis output ----------
 if analyze_btn:
     if not email_text.strip():
-        st.warning("Please paste an email first.")
+        st.warning("Please upload, paste, or select an email first.")
         st.stop()
 
     with st.spinner("🧠 Analyzing email with AI..."):
@@ -133,7 +158,6 @@ if analyze_btn:
         st.error(f"Error: {result['error']}")
         st.stop()
 
-    # Verdict banner
     verdict = result.get("verdict", "UNKNOWN")
     confidence = result.get("confidence", "N/A")
     intent = result.get("intent", "N/A")
@@ -154,11 +178,9 @@ if analyze_btn:
 
     st.divider()
 
-    # Summary
     st.subheader("📄 Executive Summary")
     st.info(result.get("summary", "N/A"))
 
-    # Two columns for details
     left, right = st.columns(2)
 
     with left:
@@ -190,6 +212,5 @@ if analyze_btn:
                 f"`{t.get('technique_id')}` ({t.get('technique_name')})"
             )
 
-    # Raw JSON expander
     with st.expander("🔧 Raw JSON (for SOAR integration)"):
         st.json(result)

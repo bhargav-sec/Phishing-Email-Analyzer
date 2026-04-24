@@ -1,2 +1,6 @@
 groq
 streamlit
+pdfplumber
+extract-msg
+pytesseract
+Pillow
