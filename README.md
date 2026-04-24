@@ -2,13 +2,13 @@
 
 AI-powered phishing email analyzer that extracts IOCs, classifies intent, and maps attack tactics to MITRE ATT&CK — built for SOC analysts.
 
-Built using Python and the Groq API (Llama 3.3 70B) to automate Tier-1 phishing triage in under 5 seconds per email.
+Accepts any email format (paste, upload PDF/EML/MSG, or drop a screenshot) and returns a Tier-2 SOC report in under 5 seconds using an LLM.
 
 ---
 
 ## 🔍 What it does
 
-Paste any suspicious email into a text file and the analyzer returns a structured SOC report:
+Feed it a suspicious email (any format) and get a structured SOC report:
 
 - **Verdict** — PHISHING / SUSPICIOUS / LEGITIMATE with confidence level
 - **Intent classification** — credential theft, malware delivery, BEC fraud, etc.
@@ -16,6 +16,18 @@ Paste any suspicious email into a text file and the analyzer returns a structure
 - **IOCs** — URLs, domains, IPs, email addresses, file hashes, attachments
 - **MITRE ATT&CK mapping** — tactic → technique ID → technique name
 - **Recommended SOC actions** — containment and remediation steps
+
+---
+
+## 📥 Supported input formats
+
+| Format | Description | Used for |
+|---|---|---|
+| `.txt` | Plain text | Copy-pasted emails |
+| `.eml` | Standard email file | Gmail / Thunderbird exports |
+| `.msg` | Outlook email file | Microsoft Outlook exports |
+| `.pdf` | Printed / saved email | PDFs of emails |
+| `.png` / `.jpg` | Screenshot of an email | Phone or desktop screenshots (OCR) |
 
 ---
 
@@ -39,9 +51,9 @@ Paste any suspicious email into a text file and the analyzer returns a structure
    • Suspicious HTML attachment
 
 🧾 IOCs:
-   domains:     micros0ft-security.com, micros0ft-verify.net
+   domains:      micros0ft-security.com, micros0ft-verify.net
    ip_addresses: 185.220.101.47 (Tor exit node)
-   attachments: account_verification.html
+   attachments:  account_verification.html
 
 🛡️  MITRE ATT&CK:
    • Initial Access → T1566 (Phishing)
@@ -59,8 +71,12 @@ Paste any suspicious email into a text file and the analyzer returns a structure
 
 - **Python 3.12**
 - **Groq API** — Llama 3.3 70B for structured JSON output
-- **Prompt engineering** — role-based system prompt (SOC Tier-2 analyst)
-- **MITRE ATT&CK framework** — mapping knowledge
+- **Streamlit** — interactive web UI
+- **pdfplumber** — PDF text extraction
+- **extract-msg** — Outlook `.msg` parsing
+- **Pillow + pytesseract** — OCR for image / screenshot emails
+- **Prompt engineering** — role-based system prompt (Tier-2 SOC analyst)
+- **MITRE ATT&CK framework** — tactic and technique mapping
 
 ---
 
@@ -69,6 +85,7 @@ Paste any suspicious email into a text file and the analyzer returns a structure
 ### Prerequisites
 - Python 3.10+
 - Free Groq API key from [console.groq.com](https://console.groq.com/keys)
+- Tesseract OCR engine (for image input): `sudo apt-get install tesseract-ocr`
 
 ### Install
 
@@ -84,11 +101,19 @@ pip install -r requirements.txt
 export GROQ_API_KEY="gsk_your_key_here"
 ```
 
-### Run
+### Run (CLI)
 
 ```bash
 python analyzer.py samples/sample1.txt
 ```
+
+### Run (Web UI)
+
+```bash
+streamlit run app.py
+```
+
+Opens an interactive dashboard with three input modes: file upload, paste, or load from sample library.
 
 ---
 
@@ -96,10 +121,15 @@ python analyzer.py samples/sample1.txt
 
 ```
 Phishing-Email-Analyzer/
-├── analyzer.py          # Main analyzer
+├── analyzer.py          # CLI analyzer
+├── app.py               # Streamlit web UI
+├── email_parser.py      # Multi-format file parser (.eml/.msg/.pdf/images)
 ├── requirements.txt     # Python dependencies
-├── samples/             # Example phishing emails
-│   └── sample1.txt
+├── samples/             # Example phishing & legitimate emails
+│   ├── sample1.txt         # Microsoft credential theft
+│   ├── sample2_bec.txt     # CEO fraud / BEC
+│   ├── sample3_malware.txt # DHL malware delivery
+│   └── sample4_legitimate.txt # Legitimate GitHub notification
 └── README.md
 ```
 
@@ -109,19 +139,20 @@ Phishing-Email-Analyzer/
 
 SOC analysts triage hundreds of phishing reports per week. This tool:
 - Cuts analysis time from ~10 min to ~5 sec per email
-- Produces consistent, structured output for ticketing systems
+- Produces consistent, structured JSON output ready for SOAR / ticketing systems
 - Maps automatically to the MITRE ATT&CK framework
-- Demonstrates how LLMs can augment (not replace) Tier-1 SOC work
+- Demonstrates how LLMs can augment (not replace) Tier-1 SOC triage work
 
 ---
 
 ## 🚧 Roadmap
 
-- [x] Web UI (Streamlit) ✅
-- [ ] Batch analysis from a folder of `.eml` files
-- [ ] VirusTotal / AbuseIPDB enrichment for IOCs
-- [ ] Export reports as PDF/JSON for SOAR integration
-- [ ] Support for reading raw `.eml` and `.msg` files
+- [x] Streamlit web UI
+- [x] Multi-format input (PDF, EML, MSG, image OCR)
+- [ ] VirusTotal / AbuseIPDB enrichment for extracted IOCs
+- [ ] Batch analysis from a folder of mixed email formats
+- [ ] Export reports as PDF / JSON for SOAR integration
+- [ ] Benchmark accuracy on a labelled phishing dataset
 
 ---
 
